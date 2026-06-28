@@ -77,32 +77,35 @@
   }
 
   /* Mobile Nav */
+  function setNavOpen(open) {
+    if (!navToggle || !navMenu) return;
+    navToggle.setAttribute('aria-expanded', String(open));
+    navMenu.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+
   if (navToggle && navMenu) {
     navToggle.addEventListener('click', function (e) {
       e.stopPropagation();
       var expanded = navToggle.getAttribute('aria-expanded') === 'true';
-      navToggle.setAttribute('aria-expanded', String(!expanded));
-      navMenu.classList.toggle('open');
+      setNavOpen(!expanded);
     });
 
     navLinks.forEach(function (link) {
       link.addEventListener('click', function () {
-        navToggle.setAttribute('aria-expanded', 'false');
-        navMenu.classList.remove('open');
+        setNavOpen(false);
       });
     });
 
     document.addEventListener('click', function (e) {
       if (!navMenu.contains(e.target) && !navToggle.contains(e.target)) {
-        navToggle.setAttribute('aria-expanded', 'false');
-        navMenu.classList.remove('open');
+        setNavOpen(false);
       }
     });
 
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
-        navToggle.setAttribute('aria-expanded', 'false');
-        navMenu.classList.remove('open');
+        setNavOpen(false);
       }
     });
   }
